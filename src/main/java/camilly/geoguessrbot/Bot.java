@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.events.session.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 
 public class Bot extends ListenerAdapter {
     public static void main(String[] args) {
@@ -19,10 +20,19 @@ public class Bot extends ListenerAdapter {
             
             JDA jda = JDABuilder.createDefault(token).enableIntents(GatewayIntent.MESSAGE_CONTENT).addEventListeners(new Bot()).build();
 
-             jda.updateCommands().addCommands(
-                    Commands.slash("ajuda", "Mostra os comandos disponíveis")
-            ).queue();
+            CommandListUpdateAction comandos = jda.updateCommands();
 
+            comandos.addCommands(
+                Commands.slash("ajuda", "Mostra os comandos disponíveis")
+            );
+
+            /* Forma menos estruturada de registrar um comando slash
+            jda.updateCommands().addCommands(
+                Commands.slash("ajuda", "Mostra os comandos disponíveis")
+            ).queue();
+            */
+
+            comandos.queue();
             jda.awaitReady();
             System.out.println("Bot online");
         } catch (InterruptedException e) {
@@ -58,6 +68,7 @@ public class Bot extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
+        /* Forma menos estruturada de tratar os recebimentos dos comandos slash
         if (event.getName().equals("ajuda")) {
             String ajudaMsg = """
                 Comandos disponíveis:
@@ -66,6 +77,21 @@ public class Bot extends ListenerAdapter {
                 - `/ajuda` – Mostra esta mensagem
                 """;
             event.reply(ajudaMsg).queue();
+        }
+        */
+        switch (event.getName()) {
+            case "ajuda" -> {
+                String ajudaMsg = """
+                Comandos disponíveis:
+                - `!ping` – Teste de latência
+                - `!pong` – Teste de deslatência
+                - `/ajuda` – Mostra esta mensagem
+                """;
+                event.reply(ajudaMsg).queue();
+            }
+            default -> {
+                return;
+            }
         }
     }
 }
