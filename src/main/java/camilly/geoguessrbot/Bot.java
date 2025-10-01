@@ -1,6 +1,7 @@
 package camilly.geoguessrbot;
 
 import io.github.cdimascio.dotenv.Dotenv;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -23,7 +24,8 @@ public class Bot extends ListenerAdapter {
             CommandListUpdateAction comandos = jda.updateCommands();
 
             comandos.addCommands(
-                Commands.slash("ajuda", "Mostra os comandos disponíveis")
+                Commands.slash("ajuda", "Mostra os comandos disponíveis"),
+                Commands.slash("culpado", "Mostra o culpado de eu pensar em fazer essa loucura")
             );
 
             /* Forma menos estruturada de registrar um comando slash
@@ -64,6 +66,15 @@ public class Bot extends ListenerAdapter {
         if (content.equalsIgnoreCase("!pong")) {
             event.getChannel().sendMessage("Ping! 🏓").queue();
         }
+
+        if (content.equalsIgnoreCase("!dificil")) {
+            String nEsquecer = """
+                But like flower petals that will bloom again *(Oh, why, why?; Yeah)*
+                Get better day by day
+                Get better day by day
+                """;
+            event.getChannel().sendMessage(nEsquecer).queue();
+        }
     }
 
     @Override
@@ -86,8 +97,19 @@ public class Bot extends ListenerAdapter {
                 - `!ping` – Teste de latência
                 - `!pong` – Teste de deslatência
                 - `/ajuda` – Mostra esta mensagem
+                - `/culpado` – Mostra a fonte da minha ideia
                 """;
                 event.reply(ajudaMsg).queue();
+            }
+            case "culpado" -> {
+                EmbedBuilder embed = new EmbedBuilder();
+                embed.setTitle("Culpado");
+                embed.setDescription("PROCURADO!!!");
+                embed.setImage("https://i.imgur.com/vEeTVnN.png");
+                embed.setThumbnail("https://emojigraph.org/media/whatsapp/tiger-face_1f42f.png");
+                embed.setFooter("RECOMPENSA: Uma coxinha e um guaravita");
+                embed.setColor(0xFF0000);
+                event.replyEmbeds(embed.build()).queue();
             }
             default -> {
                 return;
