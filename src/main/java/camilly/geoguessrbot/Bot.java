@@ -1,5 +1,8 @@
 package camilly.geoguessrbot;
 
+import java.awt.Color;
+import java.time.OffsetDateTime;
+
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -25,7 +28,8 @@ public class Bot extends ListenerAdapter {
 
             comandos.addCommands(
                 Commands.slash("ajuda", "Mostra os comandos disponíveis"),
-                Commands.slash("culpado", "Mostra o culpado de eu pensar em fazer essa loucura")
+                Commands.slash("culpado(testeembed1)", "Mostra o culpado de eu pensar em fazer essa loucura"),
+                Commands.slash("testeembed2", "Comando para testar de forma mais aprofundada Embeds")
             );
 
             /* Forma menos estruturada de registrar um comando slash
@@ -101,7 +105,8 @@ public class Bot extends ListenerAdapter {
                 """;
                 event.reply(ajudaMsg).queue();
             }
-            case "culpado" -> {
+            // Comando inserido para testar questões básicas da aplicação do Embed
+            case "culpado(testeembed1)" -> {
                 EmbedBuilder embed = new EmbedBuilder();
                 embed.setTitle("Culpado");
                 embed.setDescription("PROCURADO!!!");
@@ -110,6 +115,24 @@ public class Bot extends ListenerAdapter {
                 embed.setFooter("RECOMPENSA: Uma coxinha e um guaravita");
                 embed.setColor(0xFF0000);
                 event.replyEmbeds(embed.build()).queue();
+            }
+            case "testeembed2" -> {
+                EmbedBuilder embed = new EmbedBuilder();
+                embed.setAuthor("Alguém");
+                embed.setTitle("Título");
+                embed.setTitle("Título com image", "https://lh3.googleusercontent.com/yc_xj-cbyMJg2pMUZGW2yenAQOXq0lmMyRDLoEB2zztROUleMUY2SIrWEnKpDtuKFIOTF9N-CqwqoPo=w544-h544-l90-rj");
+                embed.setDescription("descrição descrição descrição");
+                embed.addField("Campo 1", "um", false);
+                embed.addField("Campo 2", "dois", false);
+                embed.addField("Campo 3", "três", false);
+                embed.addBlankField(false);
+                embed.addField("Campo 1", "um", true);
+                embed.addField("Campo 2", "dois", true);
+                embed.addField("Campo 3", "três", true);
+                embed.setFooter("footer com imagem", "https://upload.wikimedia.org/wikipedia/pt/5/53/Snoopy_Peanuts.png");
+                embed.setFooter("footer");
+                embed.setTimestamp(OffsetDateTime.now());
+                embed.setColor(Color.MAGENTA);
             }
             default -> {
                 return;
