@@ -23,13 +23,14 @@ public class Bot extends ListenerAdapter {
             String token = dotenv.get("DISCORD_TOKEN");
             
             JDA jda = JDABuilder.createDefault(token).enableIntents(GatewayIntent.MESSAGE_CONTENT).addEventListeners(new Bot()).build();
+            jda.awaitReady();
 
             CommandListUpdateAction comandos = jda.updateCommands();
 
             comandos.addCommands(
                 Commands.slash("ajuda", "Mostra os comandos disponíveis"),
-                Commands.slash("culpado(testeembed1)", "Mostra o culpado de eu pensar em fazer essa loucura"),
-                Commands.slash("testeembed2", "Comando para testar de forma mais aprofundada Embeds")
+                Commands.slash("culpado", "Mostra o culpado de eu pensar em fazer essa loucura"),
+                Commands.slash("testeembed", "Comando para testar de forma mais aprofundada Embeds")
             );
 
             /* Forma menos estruturada de registrar um comando slash
@@ -39,7 +40,6 @@ public class Bot extends ListenerAdapter {
             */
 
             comandos.queue();
-            jda.awaitReady();
             System.out.println("Bot online");
         } catch (InterruptedException e) {
             System.err.println("Bot interrompido durante inicialização");
@@ -102,11 +102,12 @@ public class Bot extends ListenerAdapter {
                 - `!pong` – Teste de deslatência
                 - `/ajuda` – Mostra esta mensagem
                 - `/culpado` – Mostra a fonte da minha ideia
+                - `/testeembed` – Testa formatação de mensagem com Embed
                 """;
                 event.reply(ajudaMsg).queue();
             }
             // Comando inserido para testar questões básicas da aplicação do Embed
-            case "culpado(testeembed1)" -> {
+            case "culpado" -> {
                 EmbedBuilder embed = new EmbedBuilder();
                 embed.setTitle("Culpado");
                 embed.setDescription("PROCURADO!!!");
@@ -116,7 +117,7 @@ public class Bot extends ListenerAdapter {
                 embed.setColor(0xFF0000);
                 event.replyEmbeds(embed.build()).queue();
             }
-            case "testeembed2" -> {
+            case "testeembed" -> {
                 EmbedBuilder embed = new EmbedBuilder();
                 embed.setAuthor("Alguém");
                 embed.setTitle("Título");
@@ -133,6 +134,7 @@ public class Bot extends ListenerAdapter {
                 embed.setFooter("footer");
                 embed.setTimestamp(OffsetDateTime.now());
                 embed.setColor(Color.MAGENTA);
+                event.replyEmbeds(embed.build()).queue();
             }
             default -> {
                 return;
